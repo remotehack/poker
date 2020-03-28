@@ -48,9 +48,11 @@
         WSURL.protocol = WSURL.protocol === 'https:' ? 'wss:' : 'ws:'
         WSURL.hash = ''
 
+        let ws;
+
         const connect = () => {
 
-            const ws = new WebSocket(WSURL)
+            ws = new WebSocket(WSURL)
 
             ws.addEventListener("message", (e) => {
                 console.log(e.data)
