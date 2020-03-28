@@ -8,11 +8,19 @@
 <body>
     <h1>🃏 Session!!!!</h1>
 
-    <ul>
-        <li>Gabor – 5</li>
-        <li>Ben – 17</li>
-        <li>Frank – 240</li>
-    </ul>
+    <div id="out"></div>
+
+    <script>
+        const WSURL = new URL(document.location)
+
+        WSURL.protocol = WSURL.protocol === 'https:' ? 'wss:' : 'ws:'
+        const ws = new WebSocket(WSURL)
+
+        ws.addEventListener("message", (e) => {
+            console.log("MESSAGE", e)
+            out.innerText = e.data;
+        })
+    </script>
 </body>
 
 </html>

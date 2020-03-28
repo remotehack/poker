@@ -2,16 +2,7 @@
 
 <head>
     <title>🃏</title>
-    <style>
-        body {
-            font-family: sans-serif;
-        }
-
-        label,
-        input {
-            display: block;
-        }
-    </style>
+    <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
@@ -29,7 +20,7 @@
         const ws = new WebSocket(WSURL)
 
         function send() {
-            ws.send("POINTS: " + points.innerText)
+            ws.send(JSON.stringify({ points: points.innerText }))
         }
     </script>
     <button onclick="send()">Sup</button>

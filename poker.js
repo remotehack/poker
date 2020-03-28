@@ -15,6 +15,17 @@ app.get('/new', function (req, res) {
     res.redirect('/sessions/' + sid);
 });
 
+app.get('/sessions/:sessionid.json', function (req, res) {
+    var content = storage.showCaseSession(req.params.sessionid);
+    // In case we want to look at a session that doesn't exist
+    if (false === content) {
+        res.redirect('/');
+        return;
+    }
+
+    res.send(storage.showCaseSession(req.params.sessionid))
+});
+
 app.get('/sessions/:sessionid', function (req, res) {
     var content = storage.showCaseSession(req.params.sessionid);
     // In case we want to look at a session that doesn't exist
@@ -28,54 +39,113 @@ app.get('/sessions/:sessionid', function (req, res) {
     // res.send(storage.showCaseSession(req.params.sessionid))
 });
 
+
 app.get('/sessions/:sessionid/:participantname', function (req, res) {
-    var content = storage.addParticipant(req.params.sessionid, req.params.participantname);
-    if (false === content) {
-        res.redirect('/');
-        return;
-    }
-
     res.sendFile(join(__dirname, 'www/player.html'))
-
-    // res.send(content);
 });
 
 const server = http.createServer(app);
 
 const wss = new WebSocket.Server({ server });
 
+// for ws broadcast
+const broadcastGroups = new Map();
+
 wss.on('connection', function connection(ws, request) {
 
-    // /sessions/dev123/ben
+
     const url = request.url;
-    const re = /\/sessions\/(\w+)\/(\w+)$/
-    const match = url.match(re);
-    if (match) {
-        // console.log("match", match);
 
-        const session = match[1]
-        const name = match[2]
+    // /sessions/dev123/ben
+    const playerRE = /\/sessions\/(\w+)\/(\w+)$/
+    const playerMatch = url.match(playerRE);
+    if (playerMatch) {
 
-        const userId = Math.random().toString(32);
+        const session = playerMatch[1]
+        const name = playerMatch[2]
+
+        const connectionId = Math.random().toString(32);
+
+
+
 
         // TODO - user connected
-        console.log("Enter: ", session, name, userId)
+        console.log("Enter: ", session, name, connectionId)
+
+        var content = storage.addParticipant(session, connectionId, name);
 
 
         ws.on("close", () => {
             // TODO - user left
-
-            console.log("Leave:", session, name, userId)
+            storage.removeParticipant(session, connectionId);
+            console.log("Leave:", session, name, connectionId)
         })
 
+
+        ws.on('message', function incoming(message) {
+            console.log('received: %s', session, name, connectionId, message);
+
+            try {
+                const rec = JSON.parse(message)
+
+                if (!isFinite(rec.points)) {
+                    throw new Error("where's the score at?", rec)
+                }
+
+                // TODO - update value
+                const sessData = storage.submitScore(session, connectionId, rec.points)
+
+                // const sessData = storage.showCaseSession(session);
+                console.log("BROADCAST", sessData)
+
+                const group = broadcastGroups.get(session);
+                if (group && sessData) {
+                    group.forEach(client => {
+                        client.send(JSON.stringify(sessData))
+                    })
+                }
+
+            } catch (e) {
+                console.log("ERR", e)
+            }
+
+
+        });
+
+        return;
     }
 
 
+    // /sessions/dev123/ben
+    const sessionRE = /\/sessions\/(\w+)$/
+    const sessionMatch = url.match(sessionRE);
+    if (sessionMatch) {
 
-    ws.on('message', function incoming(message) {
-        console.log('received: %s', message);
-    });
+        const session = sessionMatch[1]
 
+        console.log("Enter Session: ", session)
+
+        let group;
+        if (broadcastGroups.has(session)) {
+            group = broadcastGroups.get(session)
+        } else {
+            group = new Set();
+            broadcastGroups.set(session, group)
+        }
+        group.add(ws);
+
+
+        ws.on("close", () => {
+            console.log("Leave Session:", session)
+
+            // clean up broadcast group
+            group.delete(ws)
+            if (group.size === 0) {
+                broadcastGroups.delete(session)
+            }
+        })
+
+    }
     // ws.send('something');
 });
 

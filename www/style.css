@@ -17,3 +17,9 @@ a {
     background: #08c;
     color: #eee
 }
+
+
+label,
+input {
+    display: block;
+}
