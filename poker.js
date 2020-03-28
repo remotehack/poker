@@ -30,8 +30,10 @@ app.get('/sessions/:sessionid', function (req, res) {
     var content = storage.showCaseSession(req.params.sessionid);
     // In case we want to look at a session that doesn't exist
     if (false === content) {
-        res.redirect('/');
-        return;
+        storage.newSession(req.params.sessionid);
+
+        // res.redirect('/');
+        // return;
     }
 
     res.sendFile(join(__dirname, 'www/session.html'))
