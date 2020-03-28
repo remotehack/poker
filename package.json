@@ -20,6 +20,8 @@
   "homepage": "https://github.com/remotehack/poker#readme",
   "dependencies": {
     "express": "~4.17.1",
-    "nodemon": "~2.0.2"
+    "nodemon": "~2.0.2",
+    "ulid": "~2.3.0",
+    "ws": "~7.2.3"
   }
 }
