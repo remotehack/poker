@@ -73,19 +73,26 @@
         function render(data) {
             data = JSON.parse(data);
 
-            const ul = document.createElement('ul')
+            const ul = document.createElement('dl')
 
             for (participant in data.participants) {
 
-                const li = document.createElement('li')
-
-                li.innerText += data.participants[participant] + ': ';
+                ul.appendChild(
+                    Object.assign(
+                        document.createElement('dt'),
+                        { innerText: data.participants[participant] }
+                    )
+                )
 
                 if (undefined !== data.scores[participant]) {
-                    li.innerText += data.scores[participant]
+                    ul.appendChild(
+                        Object.assign(
+                            document.createElement('dd'),
+                            { innerText: data.scores[participant] }
+                        )
+                    )
                 }
 
-                ul.appendChild(li);
             }
 
             return ul

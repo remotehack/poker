@@ -61,3 +61,12 @@ code {
     display: block;
     background: #eee;
 }
+
+
+dl {
+    padding-left: 1em;
+    border-left: .2em solid #08f
+}
+dd {
+    font-size: 3em;
+}
