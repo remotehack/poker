@@ -56,3 +56,8 @@ input {
 .cards a:hover {
     transform: scale(1.2) rotate(2deg);
 }
+
+code {
+    display: block;
+    background: #eee;
+}

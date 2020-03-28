@@ -10,12 +10,30 @@
     <code>
         👉
         <script>
-            const a = document.createElement('a')
-            a.target = 'blank';
-            a.href = document.location + '/YOUR_NAME'
-            a.innerText = document.location.pathname + '/YOUR_NAME';
+            (() => {
 
-            document.currentScript.parentNode.insertBefore(a, document.currentScript);
+                const a = document.createElement('a')
+                a.target = 'blank';
+                a.href = document.location + '/YOUR_NAME'
+                a.innerText = document.location.pathname + '/YOUR_NAME';
+
+                document.currentScript.parentNode.insertBefore(a, document.currentScript);
+            })()
+        </script>
+    </code>
+    <code>
+        🤖
+
+        <script>
+                (() => {
+
+                    const a = document.createElement('a')
+                    a.target = 'blank';
+                    a.href = document.location + '.json'
+                    a.innerText = document.location.pathname + '.json';
+
+                    document.currentScript.parentNode.insertBefore(a, document.currentScript);
+                })()
         </script>
     </code>
     <hr />
