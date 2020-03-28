@@ -17,7 +17,17 @@
         const WSURL = new URL(document.location)
 
         WSURL.protocol = WSURL.protocol === 'https:' ? 'wss:' : 'ws:'
-        const ws = new WebSocket(WSURL)
+
+        let ws;
+
+        const connect = () => {
+            ws = new WebSocket(WSURL)
+            ws.addEventListener("close", () => {
+                setTimeout(connect, 2000)
+            })
+        }
+        connect();
+
 
         function send() {
             ws.send(JSON.stringify({ points: points.innerText }))
