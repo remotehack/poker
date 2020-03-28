@@ -17,10 +17,37 @@
         const ws = new WebSocket(WSURL)
 
         ws.addEventListener("message", (e) => {
-            console.log("MESSAGE", e)
-            out.innerText = e.data;
+            out.innerHTML = renderHTML(e.data)
         })
+
+        function clearScores() {
+            ws.send(JSON.stringify({ clearScores: true }));
+        }
+
+        function renderHTML(data) {
+            data = JSON.parse(data);
+
+            html = '<ul>';
+            for (participant in data.participants) {
+                html += '<li>';
+
+                html += data.participants[participant] + ': ';
+
+                if (undefined !== data.scores[participant]) {
+                    html += data.scores[participant]
+                }
+
+                html += '</li>';
+
+            }
+
+            html += '</ul>';
+
+            return html
+        }
+
     </script>
+    <button onclick="clearScores()">Clear scores.</button>
 </body>
 
 </html>

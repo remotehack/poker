@@ -53,7 +53,6 @@ const broadcastGroups = new Map();
 
 wss.on('connection', function connection(ws, request) {
 
-
     const url = request.url;
 
     // /sessions/dev123/ben
@@ -73,12 +72,26 @@ wss.on('connection', function connection(ws, request) {
         console.log("Enter: ", session, name, connectionId)
 
         var content = storage.addParticipant(session, connectionId, name);
+        const group = broadcastGroups.get(session);
+        if (group && content) {
+            group.forEach(client => {
+                client.send(JSON.stringify(content))
+            })
+        }
 
 
         ws.on("close", () => {
             // TODO - user left
-            storage.removeParticipant(session, connectionId);
+            const sessData = storage.removeParticipant(session, connectionId);
             console.log("Leave:", session, name, connectionId)
+
+
+            const group = broadcastGroups.get(session);
+            if (group && sessData) {
+                group.forEach(client => {
+                    client.send(JSON.stringify(sessData))
+                })
+            }
         })
 
 
@@ -88,14 +101,14 @@ wss.on('connection', function connection(ws, request) {
             try {
                 const rec = JSON.parse(message)
 
+
+                // do the points
                 if (!isFinite(rec.points)) {
                     throw new Error("where's the score at?", rec)
                 }
 
-                // TODO - update value
                 const sessData = storage.submitScore(session, connectionId, rec.points)
 
-                // const sessData = storage.showCaseSession(session);
                 console.log("BROADCAST", sessData)
 
                 const group = broadcastGroups.get(session);
@@ -134,6 +147,23 @@ wss.on('connection', function connection(ws, request) {
         }
         group.add(ws);
 
+        ws.on('message', (msg) => {
+            rec = JSON.parse(msg)
+            if (!rec.clearScores) {
+                throw new Error('Clearscores wasn\'t there or was false!', rec)
+            }
+            console.log('Received clearscore for ' + session);
+
+            const sessData = storage.clearScores(session)
+
+            const group = broadcastGroups.get(session);
+            if (group && sessData) {
+                group.forEach(client => {
+                    client.send(JSON.stringify(sessData))
+                })
+            }
+
+        })
 
         ws.on("close", () => {
             console.log("Leave Session:", session)
@@ -144,6 +174,15 @@ wss.on('connection', function connection(ws, request) {
                 broadcastGroups.delete(session)
             }
         })
+
+
+        // send out the initial state
+
+        const initial = storage.showCaseSession(session);
+        if (initial) {
+            ws.send(JSON.stringify(initial))
+        }
+
 
     }
     // ws.send('something');
