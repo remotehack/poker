@@ -54,7 +54,8 @@
 
             ws.addEventListener("message", (e) => {
                 console.log(e.data)
-                out.innerHTML = renderHTML(e.data)
+                out.innerHTML = ''
+                out.appendChild(render(e.data))
             })
 
             ws.addEventListener("close", () => {
@@ -69,26 +70,25 @@
             ws.send(JSON.stringify({ clearScores: true }));
         }
 
-        function renderHTML(data) {
+        function render(data) {
             data = JSON.parse(data);
 
-            html = '<ul>';
-            for (participant in data.participants) {
-                html += '<li>';
+            const ul = document.createElement('ul')
 
-                html += data.participants[participant] + ': ';
+            for (participant in data.participants) {
+
+                const li = document.createElement('li')
+
+                li.innerText += data.participants[participant] + ': ';
 
                 if (undefined !== data.scores[participant]) {
-                    html += data.scores[participant]
+                    li.innerText += data.scores[participant]
                 }
 
-                html += '</li>';
-
+                ul.appendChild(li);
             }
 
-            html += '</ul>';
-
-            return html
+            return ul
         }
 
     </script>
