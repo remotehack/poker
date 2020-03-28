@@ -1,0 +1,19 @@
+{
+  "name": "poker",
+  "version": "1.0.0",
+  "description": "Planning Poker at Remote Hack YAYYYYY Can people see this!? Yep, I see that",
+  "main": "this-is-a-new-file.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/remotehack/poker.git"
+  },
+  "author": "Ben Foxall",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/remotehack/poker/issues"
+  },
+  "homepage": "https://github.com/remotehack/poker#readme"
+}
