@@ -82,7 +82,7 @@
                 ul.appendChild(
                     Object.assign(
                         document.createElement('dt'),
-                        { innerText: data.participants[participant] }
+                        { innerText: unescape(data.participants[participant]) }
                     )
                 )
 

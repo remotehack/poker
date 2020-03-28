@@ -58,7 +58,7 @@ wss.on('connection', function connection(ws, request) {
     const url = request.url;
 
     // /sessions/dev123/ben
-    const playerRE = /\/(\w+)\/(\w+)$/
+    const playerRE = /\/(\w+)\/(.+)$/
     const playerMatch = url.match(playerRE);
     if (playerMatch) {
 

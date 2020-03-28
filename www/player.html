@@ -11,7 +11,8 @@
             document.currentScript.parentNode.insertBefore(Object.assign(
                 document.createElement('span'),
                 {
-                    innerText: document.location.pathname.split('/').pop()
+                    innerText:
+                        unescape(document.location.pathname.split('/').pop())
                 }
             ), document.currentScript);
         </script>
