@@ -12,10 +12,10 @@ app.use('/', express.static('www'))
 
 app.get('/new', function (req, res) {
     var sid = storage.newSession();
-    res.redirect('/sessions/' + sid);
+    res.redirect('/' + sid);
 });
 
-app.get('/sessions/:sessionid.json', function (req, res) {
+app.get('/:sessionid.json', function (req, res) {
     var content = storage.showCaseSession(req.params.sessionid);
     // In case we want to look at a session that doesn't exist
     if (false === content) {
@@ -26,7 +26,7 @@ app.get('/sessions/:sessionid.json', function (req, res) {
     res.send(storage.showCaseSession(req.params.sessionid))
 });
 
-app.get('/sessions/:sessionid', function (req, res) {
+app.get('/:sessionid', function (req, res) {
     var content = storage.showCaseSession(req.params.sessionid);
     // In case we want to look at a session that doesn't exist
     if (false === content) {
@@ -42,7 +42,7 @@ app.get('/sessions/:sessionid', function (req, res) {
 });
 
 
-app.get('/sessions/:sessionid/:participantname', function (req, res) {
+app.get('/:sessionid/:participantname', function (req, res) {
     res.sendFile(join(__dirname, 'www/player.html'))
 });
 
@@ -58,7 +58,7 @@ wss.on('connection', function connection(ws, request) {
     const url = request.url;
 
     // /sessions/dev123/ben
-    const playerRE = /\/sessions\/(\w+)\/(\w+)$/
+    const playerRE = /\/(\w+)\/(\w+)$/
     const playerMatch = url.match(playerRE);
     if (playerMatch) {
 
@@ -132,7 +132,7 @@ wss.on('connection', function connection(ws, request) {
 
 
     // /sessions/dev123/ben
-    const sessionRE = /\/sessions\/(\w+)$/
+    const sessionRE = /\/(\w+)$/
     const sessionMatch = url.match(sessionRE);
     if (sessionMatch) {
 
