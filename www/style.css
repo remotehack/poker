@@ -1,5 +1,8 @@
+
+@import "https://fonts.googleapis.com/css2?family=Space+Mono:wght@400&display=swap";
+
 body {
-    font-family: sans-serif;
+    font-family:Space Mono,  sans-serif;
 }
 
 a {

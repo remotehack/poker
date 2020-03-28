@@ -1,9 +1,20 @@
 # poker
 Planning Poker at Remote Hack
-YAYYYYY
-Can people see this!?
-Yep, I see that 
 
+
+> YAYYYYY
+> Can people see this!?
+> Yep, I see that 
+
+
+## Running locally
+
+```bash
+npm install
+npm start
+```
+
+---
 
 ## Todo
 
