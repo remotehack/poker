@@ -23,3 +23,36 @@ label,
 input {
     display: block;
 }
+
+[type="range"]{
+    width: 100%;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 2em;
+    grid-auto-rows: minmax(30px, auto);
+}
+.cards a {
+    display: block;
+    width: 6vmax;
+    height: 8vmax;
+    background: #eee;
+    color: #444;
+    margin: auto;
+    border-radius: 3px;
+    padding: .2em;
+    text-align: center;
+    line-height: 8vmax;
+    border: 1px solid #000;
+    box-shadow: rgba(0,0,0,0.25) 3px 3px 2px;
+    transition: .2s;
+}
+.cards a:focus {
+    color: #111;
+    background: #aaa;
+}
+.cards a:hover {
+    transform: scale(1.2) rotate(2deg);
+}

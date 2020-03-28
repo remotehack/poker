@@ -10,13 +10,24 @@
 
     <label>
         Points (<span id="points">0</span>)
-        <input type="range" min="0" max="1000" oninput="points.innerText = this.value" />
+        <input type="range" min="0" max="100" oninput="points.innerText = this.value; change()" value="0" />
     </label>
+
+    <!-- <p class="cards">
+        <a href="#1">1</a>
+        <a href="#2">2</a>
+        <a href="#3">3</a>
+        <a href="#5">5</a>
+        <a href="#8">8</a>
+        <a href="#1">13</a>
+        <a href="#2">21</a>
+        <a href="#meh">🤷‍♂️</a>
+    </p> -->
 
     <script>
         const WSURL = new URL(document.location)
-
         WSURL.protocol = WSURL.protocol === 'https:' ? 'wss:' : 'ws:'
+        WSURL.hash = ''
 
         let ws;
 
@@ -25,15 +36,24 @@
             ws.addEventListener("close", () => {
                 setTimeout(connect, 2000)
             })
+
+            ws.addEventListener("open", send)
         }
         connect();
 
+
+        let t;
+        function change() {
+            clearTimeout(t)
+            t = setTimeout(() => {
+                send();
+            }, 100)
+        }
 
         function send() {
             ws.send(JSON.stringify({ points: points.innerText }))
         }
     </script>
-    <button onclick="send()">Sup</button>
 
 </body>
 

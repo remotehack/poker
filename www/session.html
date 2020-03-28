@@ -6,7 +6,22 @@
 </head>
 
 <body>
-    <h1>🃏 Session!!!!</h1>
+    <h1>🃏 Poker Session!</h1>
+
+    <h3>Join url</h3>
+    <code>
+        <script>
+            const a = document.createElement('a')
+            a.target = 'blank';
+            a.href = document.location + '/YOUR_NAME'
+            a.innerText = document.location.pathname + '/YOUR_NAME';
+
+            document.currentScript.parentNode.insertBefore(a, document.currentScript);
+        </script>
+    </code>
+    <hr />
+
+
 
     <div id="out"></div>
 
@@ -14,6 +29,7 @@
         const WSURL = new URL(document.location)
 
         WSURL.protocol = WSURL.protocol === 'https:' ? 'wss:' : 'ws:'
+        WSURL.hash = ''
 
         const connect = () => {
 
