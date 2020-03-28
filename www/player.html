@@ -1,0 +1,45 @@
+<html>
+
+<head>
+    <title>🃏</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        label,
+        input {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🃏 Player!!</h1>
+
+    <label>
+        Name
+        <input type="text" />
+    </label>
+
+    <label>
+        Points (<span id="points">0</span>)
+        <input type="range" min="0" max="1000" oninput="points.innerText = this.value" />
+    </label>
+
+    <script>
+        const WSURL = new URL(document.location)
+
+        WSURL.protocol = WSURL.protocol === 'https:' ? 'wss:' : 'ws:'
+        WSURL.pathname = ''
+        const ws = new WebSocket(WSURL)
+
+        function send() {
+            ws.send("POINTS: " + points.innerText)
+        }
+    </script>
+    <button onclick="send()">Sup</button>
+
+</body>
+
+</html>
